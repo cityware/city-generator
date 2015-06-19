@@ -10,9 +10,6 @@
     "autoload": {
         "psr-4": {
             "Cityware\\Generator\\": "src/"
-        },
-        "psr-0": {
-            "Cityware\\Generator\\": "src/"
         }
     },
     "require": {

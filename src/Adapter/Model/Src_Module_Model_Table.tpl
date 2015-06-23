@@ -17,7 +17,7 @@ class %TableClass%Table
         $resultSetPrototype = new ResultSet();
         $resultSetPrototype->setArrayObjectPrototype(new %TableClass%());
         
-        $tableIdentifier = new TableIdentifier(%TableClass%::DBTABLE, %TableClass%::DBSCHEMA);
+        $tableIdentifier = new TableIdentifier(%TableClass%::$DBTABLE, %TableClass%::$DBSCHEMA);
  
         $this->tableGateway = new TableGateway($tableIdentifier, $adapter, null, $resultSetPrototype);
     }
@@ -49,9 +49,9 @@ class %TableClass%Table
      */
     public function find($id)
     {
-        if (!%TableClass%::MULTIPK) {
+        if (!%TableClass%::$MULTIPK) {
             $id = (int) $id;
-            $rowset = $this->tableGateway->select(array(%TableClass%::PKCOLUMN => $id));
+            $rowset = $this->tableGateway->select(array(%TableClass%::$PKCOLUMN => $id));
             $row = $rowset->current();
             if (!$row) {
                 throw new \Exception("Não foi encontrado registro com id = {$id}");
@@ -70,9 +70,9 @@ class %TableClass%Table
      * @throws \Exception
      */
     public function delete($id) {
-        if (!%TableClass%::MULTIPK) {
+        if (!%TableClass%::$MULTIPK) {
             $id = (int) $id;
-            $rowset = $this->tableGateway->delete(array(%TableClass%::PKCOLUMN => $id));
+            $rowset = $this->tableGateway->delete(array(%TableClass%::$PKCOLUMN => $id));
             if (!$rowset) {
                 throw new \Exception("Não foi possivel apagar o registro com id = {$id}");
             }

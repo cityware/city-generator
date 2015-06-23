@@ -67,6 +67,8 @@ class ModelAdapter extends AdapterAbstract {
         foreach ($this->oMetadata->getSchemas() as $valueSchema) {
 
             $tableNames = $this->oMetadata->getTableNames($valueSchema);
+            
+            $namespaceSchema = 'Orm\\' . $this->toCamelCase($valueSchema) . '\Entities';
 
             /* Lista as tabelas do banco de dados */
             foreach ($tableNames as $tableName) {
@@ -75,7 +77,7 @@ class ModelAdapter extends AdapterAbstract {
 
                 $class = new ClassGenerator();
 
-                $class->setNamespaceName('Orm\Admin\Entities');
+                $class->setNamespaceName($namespaceSchema);
 
                 $docBlockClass = DocBlockGenerator::fromArray(array(
                             'shortDescription' => 'Classe tipo model da tabela ' . $tableName . ' dentro do schema ' . $valueSchema,

@@ -2,7 +2,7 @@
 
 namespace Cityware\Generator\Adapter;
 
-use Cityware\Component\Filesystem;
+use Cityware\Components\Filesystem;
 use Zend\Db\Metadata\Metadata;
 use Zend\Code\Generator\ClassGenerator;
 use Zend\Code\Generator\DocBlockGenerator;

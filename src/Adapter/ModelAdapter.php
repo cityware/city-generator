@@ -87,8 +87,8 @@ class ModelAdapter extends AdapterAbstract {
                 $class->setDocBlock($docBlockClass);
                 $class->setName($this->toCamelCase($tableName));
 
-                $class->addProperty('DBSCHEMA', $valueSchema, PropertyGenerator::FLAG_CONSTANT);
-                $class->addProperty('DBTABLE', $tableName, PropertyGenerator::FLAG_CONSTANT);
+                $class->addProperty('DBSCHEMA', $valueSchema, PropertyGenerator::FLAG_STATIC);
+                $class->addProperty('DBTABLE', $tableName, PropertyGenerator::FLAG_STATIC);
 
                 foreach ($this->oMetadata->getConstraints($tableName, $valueSchema) as $constraint) {
                     if (!$constraint->hasColumns()) {
@@ -105,15 +105,13 @@ class ModelAdapter extends AdapterAbstract {
                             $multiPk = false;
                             $primaryKey = $columns[0];
                         }
-                        $class->addProperty('MULTIPK', $multiPk, PropertyGenerator::FLAG_CONSTANT);
-                        $class->addProperty('PKCOLUMN', $primaryKey, PropertyGenerator::FLAG_CONSTANT);
+                        $class->addProperty('MULTIPK', $multiPk, PropertyGenerator::FLAG_STATIC);
+                        $class->addProperty('PKCOLUMN', $primaryKey, PropertyGenerator::FLAG_STATIC);
                     }
                 }
 
 
-
                 /* Cria os metodos setter/getter e as variáveis das colunas da tabela */
-
                 $table = $this->oMetadata->getTable($tableName, $valueSchema);
 
                 /* Lista as colunas da tabela do banco de dados */

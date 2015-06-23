@@ -228,7 +228,7 @@ class ModelAdapter extends AdapterAbstract {
      * @return \Cityware\Generator\Adapter\ModelAdapter
      */
     private function generatorClassEntityTable($schemaName, $tableName) {
-        $template_model_table = file_get_contents(dirname(__FILE__) . DS . 'Model' . DS . 'Src_Module_Model_Table.tpl');
+        $template_model_table = file_get_contents(dirname(__FILE__) . DS . 'Model' . DS . 'Src_Module_Model_Table.tmpl');
         $templateModelTableSchema = str_replace("%SchemaClass%", $this->toCamelCase($schemaName), str_replace("%SchemaName%", $schemaName, $template_model_table));
         $templateModelTable = str_replace("%TableClass%", $this->toCamelCase($tableName), str_replace("%TableName%", $tableName, $templateModelTableSchema));
         file_put_contents($this->ormFolder . $this->toCamelCase($schemaName) . DS . 'Tables' . DS . $this->toCamelCase($tableName) . 'Table.php', $templateModelTable);

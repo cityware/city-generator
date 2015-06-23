@@ -67,7 +67,7 @@ class ModelAdapter extends AdapterAbstract {
         foreach ($this->oMetadata->getSchemas() as $valueSchema) {
 
             $tableNames = $this->oMetadata->getTableNames($valueSchema);
-            
+
             $namespaceSchema = 'Orm\\' . $this->toCamelCase($valueSchema) . '\Entities';
 
             /* Lista as tabelas do banco de dados */
@@ -233,7 +233,7 @@ class ModelAdapter extends AdapterAbstract {
         $templateModelTable = str_replace("%TableClass%", $this->toCamelCase($tableName), str_replace("%TableName%", $tableName, $templateModelTableSchema));
         file_put_contents($this->ormFolder . $this->toCamelCase($schemaName) . DS . 'Tables' . DS . $this->toCamelCase($tableName) . 'Table.php', $templateModelTable);
         chmod($this->ormFolder . $this->toCamelCase($schemaName) . DS . 'Tables' . DS . $this->toCamelCase($tableName) . 'Table.php', 0644);
-        
+
         return $this;
     }
 
@@ -254,8 +254,8 @@ class ModelAdapter extends AdapterAbstract {
      */
     private function camelCase($str, array $exclude = array()) {
         // non-alpha and non-numeric characters become spaces
-        $str = ucwords(trim(preg_replace('/[^a-z0-9' . implode("", $exclude) . ']+/i', ' ', $str)));
-        return lcfirst(str_replace(" ", "", $str));
+        $strReturn = ucwords(trim(preg_replace('/[^a-z0-9' . implode("", $exclude) . ']+/i', ' ', $str)));
+        return lcfirst(str_replace(" ", "", $strReturn));
     }
 
     /**
@@ -264,9 +264,7 @@ class ModelAdapter extends AdapterAbstract {
      * @return string
      */
     private function fromCamelCase($name) {
-        return trim(preg_replace_callback('/([A-Z])/', function($c) {
-                    return '_' . strtolower($c[1]);
-                }, $name), '_');
+        return trim(preg_replace_callback('/([A-Z])/', function($c) { return '_' . strtolower($c[1]); }, $name), '_');
     }
 
     private function prepareSqlTypeDocBlock($type) {
@@ -281,7 +279,7 @@ class ModelAdapter extends AdapterAbstract {
             case 'numeric':
                 $docblockType = 'integer';
                 break;
-            
+
             case 'real':
             case 'float':
             case 'float4':
@@ -298,7 +296,7 @@ class ModelAdapter extends AdapterAbstract {
             case 'boolean':
                 $docblockType = 'boolean';
                 break;
-            
+
             case 'bytea':
             case 'time':
             case 'timetz':
@@ -331,9 +329,9 @@ class ModelAdapter extends AdapterAbstract {
      * Função que gera um array dos metadados
      */
     public function getDatabaseArray() {
-        
+
         $aDatabase = Array();
-        
+
         foreach ($this->oMetadata->getSchemas() as $valueSchema) {
             $aDatabase[$valueSchema] = Array();
 

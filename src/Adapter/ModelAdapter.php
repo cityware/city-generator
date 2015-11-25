@@ -2,7 +2,7 @@
 
 namespace Cityware\Generator\Adapter;
 
-use Cityware\Components\Filesystem;
+use Cityware\Component\Filesystem;
 use Zend\Db\Metadata\Metadata;
 use Zend\Code\Generator\ClassGenerator;
 use Zend\Code\Generator\DocBlockGenerator;
@@ -111,7 +111,10 @@ class ModelAdapter extends AdapterAbstract {
                 }
 
 
+
+
                 /* Cria os metodos setter/getter e as variáveis das colunas da tabela */
+
                 $table = $this->oMetadata->getTable($tableName, $valueSchema);
 
                 /* Lista as colunas da tabela do banco de dados */
@@ -228,7 +231,7 @@ class ModelAdapter extends AdapterAbstract {
      * @return \Cityware\Generator\Adapter\ModelAdapter
      */
     private function generatorClassEntityTable($schemaName, $tableName) {
-        $template_model_table = file_get_contents(dirname(__FILE__) . DS . 'Model' . DS . 'Src_Module_Model_Table.tmpl');
+        $template_model_table = file_get_contents(dirname(__FILE__) . DS . 'Model' . DS . 'Src_Module_Model_Table.tpl');
         $templateModelTableSchema = str_replace("%SchemaClass%", $this->toCamelCase($schemaName), str_replace("%SchemaName%", $schemaName, $template_model_table));
         $templateModelTable = str_replace("%TableClass%", $this->toCamelCase($tableName), str_replace("%TableName%", $tableName, $templateModelTableSchema));
         file_put_contents($this->ormFolder . $this->toCamelCase($schemaName) . DS . 'Tables' . DS . $this->toCamelCase($tableName) . 'Table.php', $templateModelTable);
@@ -254,8 +257,8 @@ class ModelAdapter extends AdapterAbstract {
      */
     private function camelCase($str, array $exclude = array()) {
         // non-alpha and non-numeric characters become spaces
-        $strReturn = ucwords(trim(preg_replace('/[^a-z0-9' . implode("", $exclude) . ']+/i', ' ', $str)));
-        return lcfirst(str_replace(" ", "", $strReturn));
+        $str = ucwords(trim(preg_replace('/[^a-z0-9' . implode("", $exclude) . ']+/i', ' ', $str)));
+        return lcfirst(str_replace(" ", "", $str));
     }
 
     /**
@@ -264,7 +267,9 @@ class ModelAdapter extends AdapterAbstract {
      * @return string
      */
     private function fromCamelCase($name) {
-        return trim(preg_replace_callback('/([A-Z])/', function($c) { return '_' . strtolower($c[1]); }, $name), '_');
+        return trim(preg_replace_callback('/([A-Z])/', function($c) {
+                    return '_' . strtolower($c[1]);
+                }, $name), '_');
     }
 
     private function prepareSqlTypeDocBlock($type) {

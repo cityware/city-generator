@@ -48,7 +48,7 @@ class FormAdapter extends AdapterAbstract {
                 file_put_contents(MODULES_PATH . ucfirst($this->getModule()) . DS . 'src' . DS . ucfirst($this->getModule()) . DS . 'translate' . DS . 'pt_BR' . DS . strtolower($this->getController()) . DS . $this->formName . '.php', $translateFile);
                 chmod(MODULES_PATH . ucfirst($this->getModule()) . DS . 'src' . DS . ucfirst($this->getModule()) . DS . 'translate' . DS . 'pt_BR' . DS . strtolower($this->getController()) . DS . $this->formName . '.php', 0777);
 
-                $template_Form = file_get_contents(dirname(__FILE__) . DS . 'Form' . DS . 'Template_Form.tmpl');
+                $template_Form = file_get_contents(dirname(__FILE__) . DS . 'Form' . DS . 'Template_Form.tpl');
                 $templateForm = str_replace("%moduleName%", $moduleName, str_replace("%moduleNameLower%", $moduleNameLower, $template_Form));
                 file_put_contents(MODULES_PATH . ucfirst($this->getModule()) . DS . 'view' . DS . strtolower($this->getModule()) . DS . strtolower($this->getController()) . DS . $this->formName . '.phtml', $templateForm);
                 chmod(MODULES_PATH . ucfirst($this->getModule()) . DS . 'view' . DS . strtolower($this->getModule()) . DS . strtolower($this->getController()) . DS . $this->formName . '.phtml', 0644);
@@ -65,7 +65,7 @@ class FormAdapter extends AdapterAbstract {
                 file_put_contents(MODULES_PATH . ucfirst($this->getModule()) . DS . 'src' . DS . ucfirst($this->getModule()) . DS . 'translate' . DS . 'pt_BR' . DS . strtolower($this->getController()) . DS . 'edit.php', $translateFile);
                 chmod(MODULES_PATH . ucfirst($this->getModule()) . DS . 'src' . DS . ucfirst($this->getModule()) . DS . 'translate' . DS . 'pt_BR' . DS . strtolower($this->getController()) . DS . 'edit.php', 0777);
 
-                $template_Form = file_get_contents(dirname(__FILE__) . DS . 'Form' . DS . 'Template_Form.tmpl');
+                $template_Form = file_get_contents(dirname(__FILE__) . DS . 'Form' . DS . 'Template_Form.tpl');
                 $templateForm = str_replace("%moduleName%", $moduleName, str_replace("%moduleNameLower%", $moduleNameLower, $template_Form));
 
                 file_put_contents(MODULES_PATH . ucfirst($this->getModule()) . DS . 'view' . DS . strtolower($this->getModule()) . DS . strtolower($this->getController()) . DS . 'add.phtml', $templateForm);

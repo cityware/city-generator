@@ -62,7 +62,7 @@ class ControllerAdapter extends AdapterAbstract
         $controllerNameUpper = strtoupper($this->getController());
 
         /* Criação do arquivo de principal do controlador */
-        $src_module_controller = file_get_contents(dirname(__FILE__) . DS . 'Controller' . DS . 'Src_Module_Controller.tmpl');
+        $src_module_controller = file_get_contents(dirname(__FILE__) . DS . 'Controller' . DS . 'Src_Module_Controller.tpl');
         $srcModuleController = str_replace("%controllerNameUpper%", $controllerNameUpper, str_replace("%controllerNameLower%", $controllerNameLower, str_replace("%controllerName%", $controllerName, str_replace("%moduleName%", $moduleName, str_replace("%moduleNameLower%", $moduleNameLower, $src_module_controller)))));
         file_put_contents(MODULES_PATH . ucfirst($this->getModule()) . DS . 'src' . DS . ucfirst($this->getModule()) . DS . 'Controller' . DS . ucfirst($this->getController()).'Controller.php', $srcModuleController);
         chmod(MODULES_PATH . ucfirst($this->getModule()) . DS . 'src' . DS . ucfirst($this->getModule()) . DS . 'Controller' . DS . ucfirst($this->getController()).'Controller.php', 0644);

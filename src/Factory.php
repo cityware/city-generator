@@ -24,7 +24,7 @@ abstract class Factory
     /**
      * Create a captcha adapter instance
      *
-     * @param  array|Traversable                  $options
+     * @param  array|Traversable                  $adapter
      * @return AdapterInterface
      * @throws Exception\InvalidArgumentException for a non-array, non-Traversable $options
      * @throws Exception\DomainException          if class is missing or invalid

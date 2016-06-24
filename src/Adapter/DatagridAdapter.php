@@ -5,6 +5,8 @@ namespace Cityware\Generator\Adapter;
 use \Exception;
 
 class DatagridAdapter extends AdapterAbstract {
+    
+    private $srcTemplateDirectory, $dstViewDirectory, $dstIniDirectory, $dstTranslateDirectory;
 
     public function create() {
         if (!is_dir(MODULES_PATH . ucfirst($this->getModule()))) {
@@ -18,8 +20,17 @@ class DatagridAdapter extends AdapterAbstract {
         } elseif (!is_file(MODULES_PATH . ucfirst($this->getModule()) . DS . 'src' . DS . ucfirst($this->getModule()) . DS . 'Controller' . DS . ucfirst($this->getController()) . 'Controller.php')) {
             throw new Exception('Não foi criado o controlador para este formuluário', 500);
         } else {
+            
+            $this->srcTemplateDirectory = MODULES_PATH . ucfirst($this->getModule()) . DS . 'view' . DS . 'generator' . DS . 'Datagrid' . DS;
+            
+            
+            $this->dstViewDirectory = MODULES_PATH . ucfirst($this->getModule()) . DS . 'view' . DS . strtolower($this->getModule()) . DS . strtolower($this->getController()) . DS;
+            $this->dstIniDirectory = MODULES_PATH . ucfirst($this->getModule()) . DS . 'src' . DS . ucfirst($this->getModule()) . DS . 'ini' . DS . strtolower($this->getController()) . DS;
+            $this->dstTranslateDirectory = MODULES_PATH . ucfirst($this->getModule()) . DS . 'src' . DS . ucfirst($this->getModule()) . DS . 'translate' . DS . 'pt_BR' . DS . strtolower($this->getController()) . DS;
             $this->createDatagridFiles();
         }
+        
+        
     }
 
     /**
@@ -41,32 +52,32 @@ class DatagridAdapter extends AdapterAbstract {
 
         try {
             if (!empty($this->datagridName)) {
-                file_put_contents(MODULES_PATH . ucfirst($this->getModule()) . DS . 'src' . DS . ucfirst($this->getModule()) . DS . 'ini' . DS . strtolower($this->getController()) . DS . $this->datagridName . '.ini', $iniFile);
-                chmod(MODULES_PATH . ucfirst($this->getModule()) . DS . 'src' . DS . ucfirst($this->getModule()) . DS . 'ini' . DS . strtolower($this->getController()) . DS . $this->datagridName . '.ini', 0777);
+                file_put_contents($this->dstIniDirectory . $this->datagridName . '.ini', $iniFile);
+                chmod($this->dstIniDirectory . $this->datagridName . '.ini', 0777);
 
-                file_put_contents(MODULES_PATH . ucfirst($this->getModule()) . DS . 'src' . DS . ucfirst($this->getModule()) . DS . 'translate' . DS . 'pt_BR' . DS . strtolower($this->getController()) . DS . $this->datagridName . '.php', $translateFile);
-                chmod(MODULES_PATH . ucfirst($this->getModule()) . DS . 'src' . DS . ucfirst($this->getModule()) . DS . 'translate' . DS . 'pt_BR' . DS . strtolower($this->getController()) . DS . $this->datagridName . '.php', 0777);
+                file_put_contents($this->dstTranslateDirectory . $this->datagridName . '.php', $translateFile);
+                chmod($this->dstTranslateDirectory . $this->datagridName . '.php', 0777);
 
-                $datagrid_template_phtml = file_get_contents(dirname(__FILE__) . DS . 'Datagrid' . DS . 'Template_Datagrid_Index.tpl');
+                $datagrid_template_phtml = file_get_contents($this->srcTemplateDirectory . 'Template_Datagrid_Index.tmpl');
                 $datagridTemplatePhtml = str_replace("%moduleName%", $moduleName, str_replace("%moduleNameLower%", $moduleNameLower, $datagrid_template_phtml));
-                file_put_contents(MODULES_PATH . ucfirst($this->getModule()) . DS . 'view' . DS . strtolower($this->getModule()) . DS . strtolower($this->getController()) . DS . $this->datagridName . '.phtml', $datagridTemplatePhtml);
-                chmod(MODULES_PATH . ucfirst($this->getModule()) . DS . 'view' . DS . strtolower($this->getModule()) . DS . strtolower($this->getController()) . DS . $this->datagridName . '.phtml', 0644);
+                file_put_contents($this->dstViewDirectory . $this->datagridName . '.phtml', $datagridTemplatePhtml);
+                chmod($this->dstViewDirectory . $this->datagridName . '.phtml', 0644);
             } else {
-                file_put_contents(MODULES_PATH . ucfirst($this->getModule()) . DS . 'src' . DS . ucfirst($this->getModule()) . DS . 'ini' . DS . strtolower($this->getController()) . DS . 'datagrid.ini', $iniFile);
-                chmod(MODULES_PATH . ucfirst($this->getModule()) . DS . 'src' . DS . ucfirst($this->getModule()) . DS . 'ini' . DS . strtolower($this->getController()) . DS . 'datagrid.ini', 0777);
+                file_put_contents($this->dstIniDirectory . 'datagrid.ini', $iniFile);
+                chmod($this->dstIniDirectory . 'datagrid.ini', 0777);
 
-                file_put_contents(MODULES_PATH . ucfirst($this->getModule()) . DS . 'src' . DS . ucfirst($this->getModule()) . DS . 'translate' . DS . 'pt_BR' . DS . strtolower($this->getController()) . DS . 'datagrid.php', $translateFile);
-                chmod(MODULES_PATH . ucfirst($this->getModule()) . DS . 'src' . DS . ucfirst($this->getModule()) . DS . 'translate' . DS . 'pt_BR' . DS . strtolower($this->getController()) . DS . 'datagrid.php', 0777);
+                file_put_contents($this->dstTranslateDirectory . 'datagrid.php', $translateFile);
+                chmod($this->dstTranslateDirectory . 'datagrid.php', 0777);
 
-                $datagrid_template_phtml = file_get_contents(dirname(__FILE__) . DS . 'Datagrid' . DS . 'Template_Datagrid_Index.tpl');
+                $datagrid_template_phtml = file_get_contents($this->srcTemplateDirectory . 'Template_Datagrid_Index.tmpl');
                 $datagridTemplatePhtml = str_replace("%moduleName%", $moduleName, str_replace("%moduleNameLower%", $moduleNameLower, $datagrid_template_phtml));
-                file_put_contents(MODULES_PATH . ucfirst($this->getModule()) . DS . 'view' . DS . strtolower($this->getModule()) . DS . strtolower($this->getController()) . DS . 'index.phtml', $datagridTemplatePhtml);
-                chmod(MODULES_PATH . ucfirst($this->getModule()) . DS . 'view' . DS . strtolower($this->getModule()) . DS . strtolower($this->getController()) . DS . 'index.phtml', 0644);
+                file_put_contents($this->dstViewDirectory . 'index.phtml', $datagridTemplatePhtml);
+                chmod($this->dstViewDirectory . 'index.phtml', 0644);
 
-                $datagrid_template_trash = file_get_contents(dirname(__FILE__) . DS . 'Datagrid' . DS . 'Template_Datagrid_Trash.tpl');
+                $datagrid_template_trash = file_get_contents($this->srcTemplateDirectory . 'Template_Datagrid_Trash.tmpl');
                 $datagridTemplateTrash = str_replace("%moduleName%", $moduleName, str_replace("%moduleNameLower%", $moduleNameLower, $datagrid_template_trash));
-                file_put_contents(MODULES_PATH . ucfirst($this->getModule()) . DS . 'view' . DS . strtolower($this->getModule()) . DS . strtolower($this->getController()) . DS . 'trash.phtml', $datagridTemplateTrash);
-                chmod(MODULES_PATH . ucfirst($this->getModule()) . DS . 'view' . DS . strtolower($this->getModule()) . DS . strtolower($this->getController()) . DS . 'trash.phtml', 0644);
+                file_put_contents($this->dstViewDirectory . 'trash.phtml', $datagridTemplateTrash);
+                chmod($this->dstViewDirectory . 'trash.phtml', 0644);
             }
         } catch (Exception $exc) {
             throw new Exception('Não foi possivel criar o arquivo de configuração do Datagrid! <br />' . $exc->getMessage(), 500);

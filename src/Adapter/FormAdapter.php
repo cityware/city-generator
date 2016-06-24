@@ -5,6 +5,8 @@ namespace Cityware\Generator\Adapter;
 use \Exception;
 
 class FormAdapter extends AdapterAbstract {
+    
+    private $srcTemplateDirectory, $dstViewDirectory, $dstIniDirectory, $dstTranslateDirectory;
 
     public function create() {
         if (!is_dir(MODULES_PATH . ucfirst($this->getModule()))) {
@@ -18,6 +20,14 @@ class FormAdapter extends AdapterAbstract {
         } elseif (!is_file(MODULES_PATH . ucfirst($this->getModule()) . DS . 'src' . DS . ucfirst($this->getModule()) . DS . 'Controller' . DS . ucfirst($this->getController()) . 'Controller.php')) {
             throw new Exception('Não foi criado o controlador para este formuluário', 500);
         } else {
+            
+            $this->srcTemplateDirectory = MODULES_PATH . ucfirst($this->getModule()) . DS . 'view' . DS . 'generator' . DS . 'Form' . DS;
+            
+            
+            $this->dstViewDirectory = MODULES_PATH . ucfirst($this->getModule()) . DS . 'view' . DS . strtolower($this->getModule()) . DS . strtolower($this->getController()) . DS;
+            $this->dstIniDirectory = MODULES_PATH . ucfirst($this->getModule()) . DS . 'src' . DS . ucfirst($this->getModule()) . DS . 'ini' . DS . strtolower($this->getController()) . DS;
+            $this->dstTranslateDirectory = MODULES_PATH . ucfirst($this->getModule()) . DS . 'src' . DS . ucfirst($this->getModule()) . DS . 'translate' . DS . 'pt_BR' . DS . strtolower($this->getController()) . DS;
+            
             $this->createFormFiles();
         }
     }
@@ -42,37 +52,37 @@ class FormAdapter extends AdapterAbstract {
 
         try {
             if (!empty($this->formName)) {
-                file_put_contents(MODULES_PATH . ucfirst($this->getModule()) . DS . 'src' . DS . ucfirst($this->getModule()) . DS . 'ini' . DS . strtolower($this->getController()) . DS . $this->formName . '.ini', $iniFile);
-                chmod(MODULES_PATH . ucfirst($this->getModule()) . DS . 'src' . DS . ucfirst($this->getModule()) . DS . 'ini' . DS . strtolower($this->getController()) . DS . $this->formName . '.ini', 0777);
+                file_put_contents($this->dstIniDirectory . $this->formName . '.ini', $iniFile);
+                chmod($this->dstIniDirectory . $this->formName . '.ini', 0777);
 
-                file_put_contents(MODULES_PATH . ucfirst($this->getModule()) . DS . 'src' . DS . ucfirst($this->getModule()) . DS . 'translate' . DS . 'pt_BR' . DS . strtolower($this->getController()) . DS . $this->formName . '.php', $translateFile);
-                chmod(MODULES_PATH . ucfirst($this->getModule()) . DS . 'src' . DS . ucfirst($this->getModule()) . DS . 'translate' . DS . 'pt_BR' . DS . strtolower($this->getController()) . DS . $this->formName . '.php', 0777);
+                file_put_contents($this->dstTranslateDirectory . $this->formName . '.php', $translateFile);
+                chmod($this->dstTranslateDirectory . $this->formName . '.php', 0777);
 
-                $template_Form = file_get_contents(dirname(__FILE__) . DS . 'Form' . DS . 'Template_Form.tpl');
+                $template_Form = file_get_contents($this->srcTemplateDirectory . 'Template_Form.tmpl');
                 $templateForm = str_replace("%moduleName%", $moduleName, str_replace("%moduleNameLower%", $moduleNameLower, $template_Form));
-                file_put_contents(MODULES_PATH . ucfirst($this->getModule()) . DS . 'view' . DS . strtolower($this->getModule()) . DS . strtolower($this->getController()) . DS . $this->formName . '.phtml', $templateForm);
-                chmod(MODULES_PATH . ucfirst($this->getModule()) . DS . 'view' . DS . strtolower($this->getModule()) . DS . strtolower($this->getController()) . DS . $this->formName . '.phtml', 0644);
+                file_put_contents($this->dstViewDirectory . $this->formName . '.phtml', $templateForm);
+                chmod($this->dstViewDirectory . $this->formName . '.phtml', 0644);
             } else {
-                file_put_contents(MODULES_PATH . ucfirst($this->getModule()) . DS . 'src' . DS . ucfirst($this->getModule()) . DS . 'ini' . DS . strtolower($this->getController()) . DS . 'add.ini', $iniFile);
-                chmod(MODULES_PATH . ucfirst($this->getModule()) . DS . 'src' . DS . ucfirst($this->getModule()) . DS . 'ini' . DS . strtolower($this->getController()) . DS . 'add.ini', 0777);
+                file_put_contents($this->dstIniDirectory . 'add.ini', $iniFile);
+                chmod($this->dstIniDirectory . 'add.ini', 0777);
 
-                file_put_contents(MODULES_PATH . ucfirst($this->getModule()) . DS . 'src' . DS . ucfirst($this->getModule()) . DS . 'translate' . DS . 'pt_BR' . DS . strtolower($this->getController()) . DS . 'add.php', $translateFile);
-                chmod(MODULES_PATH . ucfirst($this->getModule()) . DS . 'src' . DS . ucfirst($this->getModule()) . DS . 'translate' . DS . 'pt_BR' . DS . strtolower($this->getController()) . DS . 'add.php', 0777);
+                file_put_contents($this->dstTranslateDirectory . 'add.php', $translateFile);
+                chmod($this->dstTranslateDirectory . 'add.php', 0777);
 
-                file_put_contents(MODULES_PATH . ucfirst($this->getModule()) . DS . 'src' . DS . ucfirst($this->getModule()) . DS . 'ini' . DS . strtolower($this->getController()) . DS . 'edit.ini', $iniFile);
-                chmod(MODULES_PATH . ucfirst($this->getModule()) . DS . 'src' . DS . ucfirst($this->getModule()) . DS . 'ini' . DS . strtolower($this->getController()) . DS . 'edit.ini', 0777);
+                file_put_contents($this->dstIniDirectory . 'edit.ini', $iniFile);
+                chmod($this->dstIniDirectory . 'edit.ini', 0777);
 
-                file_put_contents(MODULES_PATH . ucfirst($this->getModule()) . DS . 'src' . DS . ucfirst($this->getModule()) . DS . 'translate' . DS . 'pt_BR' . DS . strtolower($this->getController()) . DS . 'edit.php', $translateFile);
-                chmod(MODULES_PATH . ucfirst($this->getModule()) . DS . 'src' . DS . ucfirst($this->getModule()) . DS . 'translate' . DS . 'pt_BR' . DS . strtolower($this->getController()) . DS . 'edit.php', 0777);
+                file_put_contents($this->dstTranslateDirectory . 'edit.php', $translateFile);
+                chmod($this->dstTranslateDirectory . 'edit.php', 0777);
 
-                $template_Form = file_get_contents(dirname(__FILE__) . DS . 'Form' . DS . 'Template_Form.tpl');
+                $template_Form = file_get_contents(dirname(__FILE__) . DS . 'Form' . DS . 'Template_Form.tmpl');
                 $templateForm = str_replace("%moduleName%", $moduleName, str_replace("%moduleNameLower%", $moduleNameLower, $template_Form));
 
-                file_put_contents(MODULES_PATH . ucfirst($this->getModule()) . DS . 'view' . DS . strtolower($this->getModule()) . DS . strtolower($this->getController()) . DS . 'add.phtml', $templateForm);
-                chmod(MODULES_PATH . ucfirst($this->getModule()) . DS . 'view' . DS . strtolower($this->getModule()) . DS . strtolower($this->getController()) . DS . 'add.phtml', 0644);
+                file_put_contents($this->dstViewDirectory . 'add.phtml', $templateForm);
+                chmod($this->dstViewDirectory . 'add.phtml', 0644);
 
-                file_put_contents(MODULES_PATH . ucfirst($this->getModule()) . DS . 'view' . DS . strtolower($this->getModule()) . DS . strtolower($this->getController()) . DS . 'edit.phtml', $templateForm);
-                chmod(MODULES_PATH . ucfirst($this->getModule()) . DS . 'view' . DS . strtolower($this->getModule()) . DS . strtolower($this->getController()) . DS . 'edit.phtml', 0644);
+                file_put_contents($this->dstViewDirectory . 'edit.phtml', $templateForm);
+                chmod($this->dstViewDirectory . 'edit.phtml', 0644);
             }
         } catch (Exception $exc) {
             throw new Exception('Não foi possivel criar o arquivo de configuração do formulário! <br />' . $exc->getMessage(), 500);

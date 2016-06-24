@@ -75,7 +75,7 @@ class FormAdapter extends AdapterAbstract {
                 file_put_contents($this->dstTranslateDirectory . 'edit.php', $translateFile);
                 chmod($this->dstTranslateDirectory . 'edit.php', 0777);
 
-                $template_Form = file_get_contents(dirname(__FILE__) . DS . 'Form' . DS . 'Template_Form.tmpl');
+                $template_Form = file_get_contents($this->srcTemplateDirectory . 'Template_Form.tmpl');
                 $templateForm = str_replace("%moduleName%", $moduleName, str_replace("%moduleNameLower%", $moduleNameLower, $template_Form));
 
                 file_put_contents($this->dstViewDirectory . 'add.phtml', $templateForm);

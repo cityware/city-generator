@@ -50,9 +50,12 @@ class Module {
 
         /* Tratamento das variaveis para renderização de layout no evento de render */
         $eventManager->attach(\Zend\Mvc\MvcEvent::EVENT_RENDER, function($e) {
-            $children = $e->getViewModel()->getChildren()[0];
-            foreach ($children->getVariables() as $key => $value) {
-                $e->getViewModel()->setVariable($key, $value);
+            $childrenVerify = $e->getViewModel()->getChildren();
+            $children = (isset($childrenVerify[0])) ? $childrenVerify[0] : null;
+            if ($children != NULL) {
+                foreach ($children->getVariables() as $key => $value) {
+                    $e->getViewModel()->setVariable($key, $value);
+                }
             }
         });
 
